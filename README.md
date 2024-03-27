@@ -1,5 +1,5 @@
 # kickstart.nvim
-
+this is a fork of kickstart to match my requirements
 ## Introduction
 
 A starting point for Neovim that is:
