@@ -154,6 +154,10 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 1
+-- vim.opt.expandtab = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -205,14 +209,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Copilot keymaps
-vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
-  expr = true,
-  replace_keycodes = false,
-})
-vim.g.copilot_no_tab_map = true
+-- vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
+--   expr = true,
+--   replace_keycodes = false,
+-- })
+-- vim.g.copilot_no_tab_map = true
 
 -- vim.keymap.set('n', '<Home>', '<cmd>:Copilot enable<cr>', { noremap = true })
 -- vim.keymap.set('n', '<End>', ':<cmd>Copilot disable<cr>', { noremap = true })
+
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -242,7 +247,7 @@ require('lazy').setup({
   },
 
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  { 'tpope/vim-sleuth' }, -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -745,7 +750,7 @@ require('lazy').setup({
     end,
   },
 
-  { 'github/copilot.vim' },
+  -- { 'github/copilot.vim' },
 
   {
     'pmizio/typescript-tools.nvim',
@@ -892,10 +897,10 @@ harpoon:setup()
 vim.keymap.set('n', '<leader>a', function()
   harpoon:list():append()
 end)
-vim.keymap.set('n', '<C-e>', function()
-  harpoon.ui:toggle_quick_menu(harpoon:list())
-end)
-
+-- vim.keymap.set('n', '<C-e>', function()
+--   harpoon.ui:toggle_quick_menu(harpoon:list())
+-- end)
+--
 vim.keymap.set('n', '<C-h>', function()
   harpoon:list():select(1)
 end)
@@ -917,5 +922,33 @@ vim.keymap.set('n', '<C-S-N>', function()
   harpoon:list():next()
 end)
 
+-- basic telescope configuration
+local conf = require('telescope.config').values
+local function toggle_telescope(harpoon_files)
+  local file_paths = {}
+  for _, item in ipairs(harpoon_files.items) do
+    table.insert(file_paths, item.value)
+  end
+
+  require('telescope.pickers')
+    .new({}, {
+      prompt_title = 'Harpoon',
+      finder = require('telescope.finders').new_table {
+        results = file_paths,
+      },
+      previewer = conf.file_previewer {},
+      sorter = conf.generic_sorter {},
+    })
+    :find()
+end
+
+vim.keymap.set('n', '<C-e>', function()
+  toggle_telescope(harpoon:list())
+end, { desc = 'Open harpoon window' })
+
+vim.keymap.set('n', '<leader>hc', function()
+  harpoon:list():clear()
+end, { desc = 'Clear harpoon list' })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+-- vim: ts=4 sts=4 sw=4 et
