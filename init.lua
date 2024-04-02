@@ -218,7 +218,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- vim.keymap.set('n', '<Home>', '<cmd>:Copilot enable<cr>', { noremap = true })
 -- vim.keymap.set('n', '<End>', ':<cmd>Copilot disable<cr>', { noremap = true })
 
-
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -571,7 +570,7 @@ require('lazy').setup({
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         html = {},
-
+        htmx = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
