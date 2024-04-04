@@ -209,14 +209,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Copilot keymaps
--- vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
---   expr = true,
---   replace_keycodes = false,
--- })
--- vim.g.copilot_no_tab_map = true
-
--- vim.keymap.set('n', '<Home>', '<cmd>:Copilot enable<cr>', { noremap = true })
--- vim.keymap.set('n', '<End>', ':<cmd>Copilot disable<cr>', { noremap = true })
+vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false,
+})
+vim.g.copilot_no_tab_map = true
+vim.keymap.set('n', '<Home>', '<cmd>:Copilot enable<cr>', { noremap = true })
+vim.keymap.set('n', '<End>', ':<cmd>Copilot disable<cr>', { noremap = true })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -908,7 +907,7 @@ end)
 vim.keymap.set('n', '<C-k>', function()
   harpoon:list():select(3)
 end)
-vim.keymap.set('n', '<C-k>', function()
+vim.keymap.set('n', '<C-l>', function()
   harpoon:list():select(4)
 end)
 
