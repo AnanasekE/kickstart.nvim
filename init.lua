@@ -218,8 +218,8 @@ vim.keymap.set('i', '<C-H>', 'copilot#Suggest()', {
   replace_keycodes = false,
 })
 vim.g.copilot_no_tab_map = true
--- vim.keymap.set('n', '<Home>', '<cmd>:Copilot enable<cr>', { noremap = true })
--- vim.keymap.set('n', '<End>', ':<cmd>Copilot disable<cr>', { noremap = true })
+vim.keymap.set('n', '<C-[>', '<cmd>Copilot enable<cr>', { noremap = true })
+vim.keymap.set('n', '<C-]>', '<cmd>Copilot disable<cr>', { noremap = true })
 --
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -369,13 +369,17 @@ require('lazy').setup({
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
-        --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
-        -- pickers = {}
+        defaults = {
+          --   mappings = {
+          --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          --   },
+          file_ignore_patterns = {
+            'node_modules',
+          },
+        },
+        pickers = {
+          hidden = true,
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -562,7 +566,17 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        -- gopls = {
+        --   settings = {
+        --     gopls = {
+        --       analyses = {
+        --         unusedparams = true,
+        --       },
+        --       staticcheck = true,
+        --       gofumpt = true,
+        --     },
+        --   },
+        -- },
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -639,6 +653,7 @@ require('lazy').setup({
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
+        golang = { 'gofmt', 'gofumpt' },
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
         javascript = { { 'prettierd', 'prettier' } },
@@ -889,15 +904,18 @@ require('lazy').setup({
   },
 })
 
+-- manual lspconfig
+require('lspconfig').gopls.setup {}
+
 local harpoon = require 'harpoon'
 
 -- REQUIRED
 harpoon:setup()
 -- REQUIRED
 
-vim.keymap.set('n', '<leader>a', function()
+vim.keymap.set('n', '<leader>ha', function()
   harpoon:list():append()
-end)
+end, { desc = 'Add to harpoon list' })
 -- vim.keymap.set('n', '<C-e>', function()
 --   harpoon.ui:toggle_quick_menu(harpoon:list())
 -- end)
