@@ -256,9 +256,22 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
-  { 'NMAC427/guess-indent.nvim', opts = {
-    auto_cmd = true,
-  } },
+  {
+    'NMAC427/guess-indent.nvim',
+    opts = {
+      auto_cmd = true,
+      on_space_options = {
+        ['expandtab'] = true,
+        ['tabstop'] = 4,
+        ['softtabstop'] = 4,
+        ['shiftwidth'] = 4,
+      },
+      on_tab_options = {
+        ['expandtab'] = false,
+        ['tabstop'] = 4,
+      },
+    },
+  },
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
   --    {
