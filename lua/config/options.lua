@@ -5,8 +5,21 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 vim.filetype.add {
-  extension = { templ = 'templ' },
+  extension = { templ = 'templ', gotmpl = 'gotmpl', tmpl = 'gotmpl' },
+  filename = {
+    ['compose.yaml'] = 'yaml.docker-compose',
+    ['compose.yml'] = 'yaml.docker-compose',
+    ['docker-compose.yaml'] = 'yaml.docker-compose',
+    ['docker-compose.yml'] = 'yaml.docker-compose',
+    ['.gitlab-ci.yml'] = 'yaml.gitlab',
+    ['.gitlab-ci.yaml'] = 'yaml.gitlab',
+  },
 }
+
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
 
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4

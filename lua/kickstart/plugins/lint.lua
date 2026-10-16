@@ -13,6 +13,7 @@ return {
       dockerfile = { 'hadolint' },
       sh = { 'shellcheck' },
     }
+    if vim.fn.executable 'golangci-lint' == 1 then lint.linters_by_ft.go = { 'golangcilint' } end
 
     -- To allow other plugins to add linters to require('lint').linters_by_ft,
     -- instead set linters_by_ft like this:

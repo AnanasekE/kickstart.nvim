@@ -90,6 +90,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if client and client:supports_method('textDocument/inlayHint', event.buf) then
       map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
     end
+
+    if client and client:supports_method('textDocument/codeLens', event.buf) then
+      vim.lsp.codelens.enable(true, { bufnr = event.buf })
+      map('<leader>cl', vim.lsp.codelens.run, '[C]ode [L]ens run')
+    end
   end,
 })
 
@@ -99,7 +104,42 @@ vim.api.nvim_create_autocmd('LspAttach', {
 ---@type table<string, vim.lsp.Config>
 local servers = {
   -- clangd = {},
-  gopls = {},
+  gopls = {
+    settings = {
+      gopls = {
+        gofumpt = true,
+        usePlaceholders = true,
+        completeUnimported = true,
+        staticcheck = true,
+        semanticTokens = true,
+        directoryFilters = { '-.git', '-node_modules', '-vendor' },
+        analyses = {
+          unusedparams = true,
+          unusedwrite = true,
+          nilness = true,
+          shadow = true,
+          useany = true,
+        },
+        codelenses = {
+          generate = true,
+          test = true,
+          tidy = true,
+          upgrade_dependency = true,
+          vendor = true,
+          gc_details = false,
+        },
+        hints = {
+          assignVariableTypes = true,
+          compositeLiteralFields = true,
+          constantValues = true,
+          functionTypeParameters = true,
+          parameterNames = true,
+          rangeVariableTypes = true,
+        },
+        templateExtensions = { 'tmpl', 'gotmpl' },
+      },
+    },
+  },
   pyright = {},
   -- rust_analyzer = {},
   --
@@ -109,18 +149,61 @@ local servers = {
   -- But for many setups, the LSP (`ts_ls`) will work just fine
   ts_ls = {},
   eslint = {},
-  tailwindcss = {},
+  tailwindcss = {
+    filetypes = {
+      'astro',
+      'css',
+      'gotmpl',
+      'html',
+      'javascript',
+      'javascriptreact',
+      'less',
+      'sass',
+      'scss',
+      'svelte',
+      'templ',
+      'typescript',
+      'typescriptreact',
+      'vue',
+    },
+    settings = {
+      tailwindCSS = {
+        includeLanguages = { templ = 'html', gotmpl = 'html' },
+      },
+    },
+  },
   cssls = {},
-  emmet_language_server = {},
+  emmet_language_server = {
+    -- default filetypes from nvim-lspconfig, plus gotmpl and templ
+    filetypes = {
+      'astro',
+      'css',
+      'eruby',
+      'html',
+      'htmlangular',
+      'htmldjango',
+      'javascriptreact',
+      'less',
+      'sass',
+      'scss',
+      'svelte',
+      'typescriptreact',
+      'vue',
+      'gotmpl',
+      'templ',
+    },
+  },
+  html = {
+    filetypes = { 'html', 'templ' },
+  },
   jsonls = {},
-  yamlls = {},
+  yamlls = {
+    filetypes = { 'yaml', 'yaml.docker-compose', 'yaml.gitlab' },
+  },
   bashls = {},
   terraformls = {},
 
   templ = {},
-
-  stylua = {}, -- Used to format Lua code
-  prettier = {},
 
   dockerls = {},
   docker_compose_language_service = {},
@@ -172,6 +255,7 @@ vim.list_extend(ensure_installed, {
   'emmet-language-server',
   'eslint-lsp',
   'gofumpt',
+  'html-lsp',
   'json-lsp',
   'prettierd',
   'pyright',
@@ -181,6 +265,11 @@ vim.list_extend(ensure_installed, {
   'terraform-ls',
   'typescript-language-server',
   'yaml-language-server',
+  'stylua', -- Used to format Lua code
+  'prettier',
+  'goimports',
+  'golangci-lint',
+  'delve',
   -- You can add other tools here that you want Mason to install
 })
 
